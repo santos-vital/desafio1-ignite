@@ -42,7 +42,7 @@ app.post('/users', (request, response) => {
     todos: []
   });
 
-  return response.status(201).json({messege: "User successfully registered!"})
+  return response.status(201).json(users)
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
@@ -52,11 +52,38 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { title, deadline } = request.body;
+
+  const { user } = request;
+
+  const addTodo = {
+    id: uuidv4(),
+    title,
+    done: false,
+    deadline: new Date(deadline),
+    created_at: new Date()
+  }
+
+  user.todos.push(addTodo);
+
+  return response.status(201).json(addTodo);
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { id } = request.params;
+  const { title, deadline } = request.body;
+  const { user } = request;
+
+  const todo = user.todos.find(todo => todo.id === id);
+
+  if(!todo) {
+    return response.status(404).json({messege: "User not found!"})
+  }
+
+  todo.title = title;
+  todo.deadline = new Date(deadline);
+
+  return response.status(201).json(todo);
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
