@@ -2,7 +2,7 @@
   "name": "desafio",
   "version": "1.0.0",
   "main": "src/server.js",
-  "license": "MI",
+  "license": "MIT",
   "scripts": {
     "dev": "nodemon",
     "test": "jest"
